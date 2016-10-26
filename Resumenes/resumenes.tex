@@ -1,0 +1,463 @@
+\documentclass[10pt,a4paper,spanish]{report}
+
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amsthm}
+\usepackage{amsfonts, amssymb, latexsym}
+\usepackage{enumerate}
+\usepackage[official]{eurosym}
+\usepackage{graphicx}
+\usepackage[usenames, dvipsnames]{color}
+\usepackage{colortbl}
+\usepackage{multirow}
+\usepackage{fancyhdr}
+\usepackage[all]{xy}
+\usepackage{minted}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{algpseudocode}
+
+\pgfplotsset{compat=1.5}
+
+% a4large.sty -- fill an A4 (210mm x 297mm) page
+% Note: 1 inch = 25.4 mm = 72.27 pt
+%       1 pt = 3.5 mm (approx)
+
+% vertical page layout -- one inch margin top and bottom
+\topmargin      0 mm    % top margin less 1 inch
+\headheight     0 mm    % height of box containing the head
+\headsep       10 mm    % space between the head and the body of the page
+\textheight   250 mm
+\footskip      14 mm    % distance from bottom of body to bottom of foot
+
+% horizontal page layout -- one inch margin each side
+%\oddsidemargin    0   mm    % inner margin less one inch on odd pages
+%\evensidemargin   0   mm    % inner margin less one inch on even pages
+%\textwidth      159.2 mm    % normal width of text on page
+
+\usepackage[math]{iwona}
+\usepackage[T1]{fontenc}
+\usepackage{inconsolata}
+
+\usepackage[pdftex, bookmarks=true,
+bookmarksnumbered=false, % true means bookmarks in
+% left window are numbered
+bookmarksopen=false,     % true means only level 1
+% are displayed.
+colorlinks=true,
+linkcolor=webblue]{hyperref}
+
+\definecolor{webgreen}{rgb}{0, 0.5, 0} % less intense green
+\definecolor{webblue}{rgb}{0, 0, 0.5}  % less intense blue
+\definecolor{webred}{rgb}{0.5, 0, 0}   % less intense red
+\definecolor{dblackcolor}{rgb}{0.0,0.0,0.0}
+\definecolor{dbluecolor}{rgb}{.01,.02,0.7}
+\definecolor{dredcolor}{rgb}{0.8,0,0}
+\definecolor{dgraycolor}{rgb}{0.30,0.3,0.30}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % regla horizontal para  el titulo
+
+\pagestyle{fancy}
+%con esto nos aseguramos de que las cabeceras de capítulo y de sección vayan en minúsculas
+
+\renewcommand{\chaptermark}[1]{%
+\markboth{#1}{}}
+\renewcommand{\sectionmark}[1]{%
+\markright{\thesection\ #1}}
+\fancyhf{} %borra cabecera y pie actuales
+\fancyhead[LE,RO]{\bfseries\thepage}
+\fancyhead[LO]{\bfseries\leftmark}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0pt}
+\addtolength{\headheight}{0.5pt} %espacio para la raya
+\fancypagestyle{plain}{%
+\fancyhead{} %elimina cabeceras en páginas "plain"
+\renewcommand{\headrulewidth}{0pt} %así como la raya
+}
+
+%%%%% Para cambiar el tipo de letra en el título de la sección %%%%%%%%%%%
+\chapterfont{\fontfamily{pag}\selectfont} %% for chapter if you want
+\sectionfont{\fontfamily{pag}\selectfont}
+\subsectionfont{\fontfamily{pag}\selectfont}
+\subsubsectionfont{\fontfamily{pag}\selectfont}
+
+\renewcommand{\labelenumi}{\arabic{enumi}. }
+\renewcommand{\labelenumii}{\labelenumi\alph{enumii}) }
+\renewcommand{\labelenumiii}{\labelenumii\roman{enumiii}: }
+
+\newmintedfile[myC]{c}{
+  linenos,
+  numbersep=5pt,
+  gobble=0,
+  frame=lines,
+  framesep=2mm,
+  fontsize=\footnotesize
+}
+
+\title{Sistemas Operativos}
+\author{David Sánchez Jiménez}
+
+\begin{document}
+  \begin{titlepage}
+    \begin{center}
+      \HRule \\[0.8cm]
+      \textsc{\huge Sistemas Operativos\\[0.5cm]}\\[1.6cm]
+      \HRule \\[1cm]
+      \begin{flushleft}
+        \emph{Hecho por:}\\
+         David Sánchez Jiménez
+      \end{flushleft}
+      \vspace{12cm}
+      \large{\today}\\
+      \vspace{0.5cm}
+      \htmladdnormallink{\includegraphics[width=2cm]{88x31.png}}
+      {http://creativecommons.org/licenses/by-nc/4.0/}\\[0.5cm]
+      \texttt{Resumenes de Sistemas Operativos\\ by
+      \href{mailto:dasaji92@gmail.com}{David Sánchez Jiménez}
+      is licensed under a \htmladdnormallink{Creative Commons
+      Reconocimiento-NoComercial-CompartirIgual 4.0 \\Internacional License}
+      {http://creativecommons.org/licenses/by-nc/4.0/}}.\\[3mm]
+    \end{center}
+  \end{titlepage}
+
+  \tableofcontents
+  \newpage
+
+  \chapter{Tema 1: }
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Punto 2.1 Stallings
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  \section{Objetivos y funciones de los sistemas operativos}
+
+  \noindent
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Punto 2.2 Stallings
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  \section{La evolución de los sistemas operativos}
+
+  \noindent
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Punto 2.3 Stallings
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  \section{Principales logros}
+
+  \noindent
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Punto 2.4 Stallings
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  \section{Desarrollos que han llevado a los sistemas operativos modernos}
+
+  \noindent
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Punto 4.2 Stallings
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  \section{Multiprocesamiento simétrico}
+
+  \noindent
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Punto 4.3 Stallings
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  \section{Micronucleos}
+
+  \noindent
+  Un micronúcleo es la pequeña parte central de un sistema operativo que proporciona las bases para extensiones modulares. Sin embargo, el término es algo confuso, y hay varias cuestiones relacionadas con los micronúcleos con respuestas distintas por parte de diferentes equipos de diseño de sistemas operativos como cómo de pequeño debe ser para denominarse micronúcleo, cómo diseñar manejadores de dispositivos para obtener el mejor rendimiento a la vez que se abstraen sus funciones del hardware, si ejecutar operaciones que no pertenecen al núcleo dentro de éste o en el espacio de usuario, y si mantener el código de subsistemas existentes (por ejemplo, una versión de UNIX) o empezar de cero. Se popularizó por su uso en el sistema operativo Mach. Este enfoque proporciona un alto grado de flexibilidad y modularidad.
+
+  \subsection{Arquitectura Micronúcleo}
+
+  \noindent
+  En los primeros sistemas operativos monolíticos, de prácticamente cualquier procedimiento se podía llamar a cualquier otro. Esta falta de estructura se hizo insostenible a medida que los sistemas operativos crecieron hasta proporciones desmesuradas. Específicamente, se desarrollaron los sistemas operativos por capas, en los cuales las funciones se organizan jerárquicamente y sólo hay interacción entre las capas adyacentes. Con el enfoque por capas, la mayor parte o todas las capas ejecutan en modo núcleo pero incluso en este enfoque por capas hay problemas. Cada capa posee demasiada funcionalidad y grandes cambios en una capa pueden tener numerosos efectos, muchos difíciles de seguir, en el código de las capas adyacentes (encima o debajo). Como resultado es difícil implementar versiones a medida del sistema operativo básico con algunas funciones añadidas o eliminadas. Además, es difícil construir la seguridad porque hay muchas interacciones entre capas adyacentes. La filosofía existente en el micronúcleo es que solamente las funciones absolutamente esenciales del sistema operativo estén en el núcleo. Los servicios y aplicaciones menos esenciales se construyen sobre el micronúcleo y se ejecutan en modo usuario. Aunque la filosofía de qué hay dentro y qué hay fuera del micronúcleo varía de un diseño a otro, la característica general es que muchos servicios que tradicionalmente habían formado parte del sistema operativo ahora son subsistemas externos que interactúan con el núcleo y entre ellos mismos; algunos ejemplos son: manejadores de dispositivos, servidores de archivos, gestores de memoria virtual, sistemas de ventana y servicios de seguridad. \\
+
+  \noindent
+  La arquitectura del micronúcleo reemplaza la tradicional estructura vertical y estratificada en capas por una horizontal. Los componentes del sistema operativo externos al micronúcleo se implementan como servidores de procesos; interactúan entre ellos dos a dos, normalmente por paso de mensajes a través del micronúcleo. De esta forma, el micronúcleo funciona como un intercambiador de mensajes: válida mensajes, los pasa entre los componentes, y concede el acceso al hardware. El micronúcleo también realiza una función de protección; previene el paso de mensajes a no ser que el intercambio esté permitido. Cada uno de los servidores puede mandar mensajes al resto de los servidores y puede invocar funciones primitivas del micronúcleo. Es decir, es un arquitectura cliente/servidor dentro de un solo computador.
+
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Punto 13.0 Stallings
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  \section{Sistemas operativos en red y sistemas operativos distribuidos}
+
+  \subsection{Arquitectura de comunicaciones}
+
+  \noindent
+  Es un software que da soporte a un grupo de computadores en red. Proporciona soporte para aplicaciones distribuidas, tales como correo electrónico, transferencia de ficheros y acceso a terminales remotos. Sin embargo, los computadores siguen siendo entidades independientes para los usuarios y para las aplicaciones, que se deben comunicar entre sí por expreso deseo. Cada computador tiene su propio sistema operativo y es posible tener una mezcla de computadores y sistemas operativos, siempre y cuando todas las máquinas soporten la misma arquitectura de comunicaciones. La arquitectura de comunicaciones más ampliamente utilizada es el conjunto de protocolos TCP/IP, que se examina en este capítulo.
+
+  \subsection{Sistema operativo de red}
+
+  \noindent
+  En esta configuración hay una red de máquinas, normalmente estaciones de trabajo de un solo usuario, y una o más máquinas servidoras. Éstas proporcionan servicios de red o aplicaciones, tales como almacenamiento de ficheros y gestión de impresión. Cada computador tiene su propio sistema operativo. El sistema operativo de red es un añadido al sistema operativo local, que permite a las máquinas interactuar con los servidores. El usuario conoce la existencia de múltiples computadores y debe trabajar con ellos de forma explícita. Normalmente se utiliza una arquitectura de comunicaciones común para dar soporte a estas aplicaciones de red.
+
+  \subsection{Sistema operativo distribuido}
+
+  \noindent
+  Es un sistema operativo común compartido por una red de computadores. A los usuarios les parece un sistema operativo normal centralizado, pero les proporciona acceso transparente a los recursos de diversas máquinas. Un sistema operativo distribuido puede depender de una arquitectura de comunicaciones para las funciones básicas de comunicación, pero normalmente se incorporan un conjunto de funciones de comunicación más sencillas para proporcionar mayor eficiencia.
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Punto 2.7 Silberschatz
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  \section{Estructura del sistema operativo}
+  \noindent
+  La ingeniería de algo tan complejo como un sistema operativo debe hacerse con mucho cuidado para que todo funcione correctamente, en vez de tener un sistema monolítico, se suele hacer dividiendo la tarea en componentes más pequeños, módulos bien definidos.
+
+  \subsection{Estructura simple}
+  \noindent
+  Muchos sistemas comerciales comienzan siendo sistemas pequeños, simples y limitados y luego crecen mucho más allá, por eso no tienen una estructura bien definida. Es el caso de MS-DOS, que fue diseñado para proporcionar la mayor funcionalidad posible en el menor espacio posible y por eso no se dividió en módulos de forma cuidadosa. En MS-DOS, las interfaces y niveles de funcionalidad no están separados, por ejemplo, los programas de aplicación pueden acceder a las rutinas básicas de E/S para escribir en la pantalla y en las unidades de disco. Esta libertad hace que el sistema sea muy vulnerable y que falle cuando los programas de usuario fallan, pero se tuvo que diseñar así porque el 8088 de Intel para el que fue escrito no proporcionaba un modo dual ni protección hardware. La estructura de MS-DOS es:
+
+  \[\begin{xy}
+  ,(0,0)*+=<20mm>[]\txt<20mm>{Programa de aplicación}
+  ,(30,0)*+=<20mm>[]\txt<20mm>{Programa residente\\del sistema}
+  ,(60,0)*+=<20mm>[]\txt<20mm>{Controladores de\\dispositivo MS-DOS}
+  ,(90,0)*+=<20mm>[]\txt<20mm>{Controladores de dispositivo\\ROM BIOS}
+  \ar@{->} (10,0);(21,0)
+  \ar@{->} (38,0);(50,0)
+  \ar@{->} (70,0);(80,0)
+  \ar@/^/ (10,4);(79,6)
+  \ar@/_/ (38,-6);(80,-6)
+  \end{xy}\]
+  \noindent
+  Otro ejemplo de estructuración limitada es UNIX, que inicialmente estaba limitado por la funcionalidad hardware. Consta de dos partes separadas: \textit{kernel} y los programas del sistema. El \textit{kernel} se divide en una serie de interfaces y controladores de dispositivo, que se han ido ampliado a medida que ha ido evolucionando. Podemos ver al sistema UNIX tradicional como una estructura de niveles donde todo lo que está por debajo de la interfaz de llamadas al sistema y por encima del hardware físico es el \textit{kernel}. El \textit{kernel} proporciona las funcionalidades del sistema operativo, a través de las llamadas al sistema. Es decir, una gran cantidad de funcionalidad en un sólo nivel. Presenta una estructura monolítica difícil de implementar y mantener.
+
+  \subsection{Estructura en niveles}
+  % \noindent
+  % Con el soporte hardware adecuado, los sistemas operativos pueden dividirse en partes más pequeñas y adecuadas, así, podrá mantener un mayor control sobre la computadora y sobre las aplicaciones que hacen uso de ésta. Los implementadores tienen más libertad para cambiar el funcionamiento interno del sistema y crear sistemas operativos modulares. También cabe destacar que con este método se permite el ocultamiento de información a niveles superiores, dado que se deja libres a los programadores para implementar rutinas de bajo nivel como prefieran siempre que la interfaz externa de la rutina permanezca invariable y realice la tarea anunciada.
+
+  \noindent
+  Un sistema puede hacerse modular de muchas formas. Un posible método es mediante una \textit{estructura en niveles}, en la que el sistema operativo se divide en una serie de capas (niveles). El nivel inferior (nivel 0) es el hardware y el superior (nivel N) es la interfaz de usuario. Un nivel de un sistema operativo es una implementación de un objeto abstracto formado por una serie de datos y por las operaciones que permiten manipular dichos datos.
+
+  \noindent
+  La principal ventaja del método de niveles es la simplicidad de construcción y depuración. Cada nivel usa funciones y servicios de los niveles inferiores. Este método facilita la depuración y verificación del sistema: cuando se encuentra un error en un determinado nivel, se sabe que el error debe estar ahí pues el resto de niveles inferiores ya han sido depurados. Además, cada nivel utiliza sólo las operaciones que le proporciona el nivel inferior, que no sabe cómo han sido implementadas, sólo se conoce lo que hacen (ocultación de la información).
+
+  \noindent
+  Lo más difícil en este método es definir apropiadamente los diferentes niveles ya que cada nivel sólo puede usar las operaciones del nivel inferior. Además, las implementaciones por niveles tienden a ser menos eficientes que otros tipos de implementaciones, ya que por ejemplo, cuando un programa de usuario ejecuta una operación de E/S, hace una llamada al sistema y cada nivel añade una carga de trabajo adicional a esa llamada, por lo que tarda más en ejecutarse que en un sistema sin niveles. Por eso, en los últimos años se han hecho sistemas con menos niveles y más funcionalidad por cada nivel.
+
+  \subsection{Microkernels}
+  \noindent
+  En los años 80 se desarrolló un sistema operativo llamado \textit{Mach} que modularizaba el \textit{kernel} usando lo que se denomina \textit{microkernel}. Este método elimina todos los componentes no esenciales del \textit{kernel} implementándolos como programas a nivel de usuario, así, el resultado es un \textit{kernel} más pequeño.
+
+  \noindent
+  La función principal del \textit{microkernel} es proporcionar comunicación entre el programa cliente y los distintos servicios que se ejecutan también en el espacio de usuario, esto se hace mediante el \textit{paso de mensajes}: el programa cliente y el servicio se comunican a través del \textit{microkernel}. Otra ventaja de este método es la facilidad para ampliar el sistema operativo ya que cualquier nueva funcionalidad se añade como programa de usuario sin tener que modificar el \textit{kernel}. El sistema es más fácil de portar de un soporte hardware a otro y además, proporciona más seguridad ya que si un servicio falla, al ser ejecutado como programa de usuario, no afecta al sistema operativo.
+
+  \noindent
+  Algunos ejemplos de sistemas operativos con microkernel son: Tru64 UNIX, QNX o Windows NT.
+
+  \noindent
+  El problema de esta solución es que puede llegar a ser menos eficiente que otras debido a la carga de procesamiento impuesta por las funciones del sistema.
+
+  \subsection{Módulos}
+  \noindent
+  La mejor metodología actual para diseñar sistemas operativos es la que se basa en programación orientada a objetos para crear un \textit{kernel} modular. En este caso, el \textit{kernel} dispone de un conjunto de componentes fundamentales y enlaza dinámicamente los servicios adicionales durante el arranque o en tiempo de ejecución. Se utiliza en las implementaciones modernas de UNIX tales como Solaris, Linux o Mac OS X. La estructura está organizada en torno a un \textit{kernel central} con siete módulos de \textit{kernel cargables}:
+  \begin{itemize}
+    \item Clases de planificación.
+    \item Sistemas de archivos.
+    \item Llamadas al sistema cargables.
+    \item Formatos ejecutables.
+    \item Módulos STREAMS.
+    \item Módulos misceláneos.
+    \item Controladores de bus y dispositivos.
+  \end{itemize}
+
+  \noindent
+  Con este diseño se consigue proporcionar servicios básicos y también implementar ciertas características dinámicamente. El resultado global es un similar a un sistema de niveles, en el sentido de que cada sección del \textit{kernel} tiene interfaces bien definidas y protegidas, pero es más flexible debido a que cualquier módulo puede llamar a otro. También es bastante parecido a un \textit{microkernel} ya que el módulo principal sólo dispone de funciones esenciales y del conocimiento sobre cómo comunicarse con otros módulos, sin embargo, es más eficiente ya que los módulos no necesitan invocar un mecanismo de paso de mensajes para comunicarse.
+
+  \noindent
+  El sistema operativo Mac OS X utiliza una estructura híbrida ya que se estructura con una técnica por niveles en la que uno de estos niveles es el \textit{microkernel} Mach. Los niveles superiores incluyen entornos de aplicación y un conjunto de servicios que proporcionan una interfaz gráfica a las aplicaciones. Por debajo de estos niveles se encuentra el entorno \textit{kernel} formado por el \textit{microkernel} Mach y el \textit{kernel} BSD:
+  \begin{enumerate}
+    \item Mach proporciona gestión de memoria, soporte para llamadas a procedimientos remotos y facilidades para la comunicación interprocesos y mecanismos de planificación de hebras de ejecución.
+    \item BSD proporciona una interfaz de línea de comandos BSD, soporte para red y sistemas de archivos y una implementación de la API de POSIX.
+    \item Además de Mach y BSD el \textit{kernel} proporciona un kit de E/S para el desarrollo de controladores de dispositivo y módulos dinámicamente cargables (\textit{extensiones del kernel}). Las aplicaciones y servicios pueden usar directamente las facilidades de Mach o BSD.
+  \end{enumerate}
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Punto 2.8 Silberschatz
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  \section{Máquinas virtuales}
+  \noindent
+  La idea que subyace a una máquina virtual es la de abstraer el hardware de la computadora formando varios entornos de ejecución diferentes, para crear así la ilusión de que cada entorno de ejecución está operando en su propia computadora privada. Con los mecanismos de planificación de la CPU y las técnicas de memoria virtual un sistema operativo puede crear la ilusión de que un proceso tiene su propio procesador y su propia memoria (virtual). El método de máquina virtual no proporciona características como llamadas al sistema o sistema de archivos (que el hardware básico no proporciona) sino que proporciona una interfaz que es idéntica al hardware básico subyacente por lo que cada proceso dispone de una copia (virtual) del hardware subyacente.
+
+  \noindent
+  La principal razón para usar máquinas virtuales es poder compartir el mismo hardware mientras se opera con entornos de ejecución diferentes. Una de las principales dificultades del método de máquina virtual son los sistemas de disco (supongamos una máquina física con tres unidades de disco que desea dar soporte a siete máquinas virtuales), esto se soluciona proporcionando discos virtuales, \textit{minidiscos} en el sistema operativo VM de IBM, que son idénticos en todo excepto en tamaño. El sistema implementa los minidiscos asignando tantas pistas de los discos físicos como necesite el minidisco, aunque la suma de todos debe ser menor al espacio del disco físico disponible.
+
+  \subsection{Implementación}
+  \noindent
+  Una máquina virual resulta difícil de implementar pues debemos conseguir un modo usuario y un modo \textit{kernel} virtuales ejecutándose ambos en un modo usuario físico. Las acciones que dan transferencia  del modo usuario al modo \textit{kernel} en una máquina real (ej: llamada al sistema) también tienen que hacer que se pase del modo usuario virtual al modo \textit{kernel} virtual en una máquina virtual. Esto se consigue produciendo una transferencia al monitor de la máquina virtual en la máquina real, cuando el monitor de la máquina virtual obtiene el control puede cambiar el contenido de los registros y contador de programa para que la máquina virtual simule el efecto de una llamada al sistema, a continuación, puede reiniciar la máquina virtual que ahora se encuentra en modo \textit{kernel} virtual.
+
+  \noindent
+  La principal diferencia es el tiempo, ya que, por ejemplo, una E/S real puede llevar 100 milisegundos mientras que una virtual puede tardar menos (porque se pone en cola) o tardar más (porque es interpretada). Además, la CPU se multiprograma entre muchas máquinas virtuales ralentizando aún más las máquinas virtuales de manera impredecible.
+
+  \subsection{Beneficios}
+  \noindent
+  El concepto de máquina virtual presenta varias ventajas:
+  \begin{enumerate}
+    \item Existe una protección total de los recursos del sistema, cada máquina virtual está aislada de las demás por lo que no existen problemas de protección.
+    \item Para compartir recursos entre dos máquinas virtuales hay dos métodos:
+    \begin{itemize}
+      \item Es posible compartir un minidisco y por tanto, compartir archivos. Este esquema se basa en el concepto de disco físico compartido implementado en software.
+      \item Es posible definir una red de máquinas virtuales pudiendo cada una de ellas enviar información a través de una red de comunicaciones virtual. Se basa en las redes físicas de comunicaciones.
+    \end{itemize}
+    \item Una máquina virtual es lo mejor para la investigación y desarrollo de sistemas operativos. Dado que un sistema operativo es un software muy potente un sólo error en su implementación podría destruir todo el sistema de archivos, por ello se deben probar todos los cambios realizados en el sistema operativo. Además mientras se realizan cambios y se prueban el sistema operativo no se puede usar (\textit{{tiempo de desarrollo del sistema}}) por lo que para eliminar este problema, se usan máquinas virtuales para no interrumpir las operaciones normales del sistema mientras se acometen las tareas de desarrollo.
+  \end{enumerate}
+
+  \subsection{Ejemplos}
+  \noindent
+  Actualmente, las máquinas virtuales se usan para solucionar problemas de compatibilidad entre sistemas. Operan sobre un sistema operativo de cualquier tipo por lo que los distintos métodos de diseño de sistemas operativos no son mutuamente excluyentes.
+
+  \subsubsection{VMware}
+  \noindent
+  VMware es una aplicación comercial que abstrae el hardware 80x86 de Intel, creando una serie de máquinas virtuales aisladas. VMware se ejecuta como una aplicación sobre un sistema operativo \textit{host} y permite al dicho sistema ejecutar de forma concurrente varios \textit{sistemas operativos huésped} diferentes como máquinas virtuales independientes.
+
+  \noindent
+  Por ejemplo, si un programador quiere probar una aplicación en varios sistemas operativos, la opción más rápida y económica es hacer las pruebas \textit{de forma concurrente} sobre la misma computadora física usando un sistema operativo \textit{host} y tres sistemas operativos huésped con VMware.
+
+  \subsubsection{Máquina virtual Java}
+  \noindent
+  Java es un popular lenguaje de programación orientado a objetos que además de una especificación de lenguaje y una amplia biblioteca de interfaces de programación de aplicaciones proporciona una especificación para una máquina virtual Java (JVM: \textit{Java Virtual Machine}).
+
+  \noindent
+  Los objetos de Java se especifican mediante clases y para cada clase, el compilador genera un archivo de salida (.class) en \textit{código intermedio (bytecode)} que es neutral respecto a la arquitectura y se puede ejecutar sobre cualquier implementación de la JVM.
+
+  \noindent
+  La JVM consta de un \textit{cargador de clases} y de un intérprete de Java. El cargador de clases carga los archivos .class, después, el verificador comprueba que es un código intermedio Java válido y que no se realicen operaciones aritméticas con los punteros que proporcionen acceso ilegal a la memoria. Tras esto, el intérprete de Java ejecuta la clase. La JVM también gestiona la memoria llevando a cabo tareas de \textit{recolección de memoria} que consisten en eliminar los objetos que no están siendo usados y devolver esa memoria al sistema.
+
+  \noindent
+  La JVM se puede implementar por encima de un sistema operativo \textit{host} o como parte de un explorador web. También puede implementarse por hardware en un chip específicamente diseñado para ejecutar programas Java. Si la JVM se implementa por software interpreta las operaciones en código intermedio una a una. Una técnica más rápida consiste en usar un compilador \textit{just in time} que convierte el código intermedio en código máquina nativo del sistema \textit{host}. La opción más rápida es usar un chip Java que ejecute las operaciones en código intermedio Java como código nativo.
+
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Punto 1.7.1 Tanenbaum
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  \section{Sistemas monolíticos}
+
+  \noindent
+  En este diseño todo el sistema operativo se ejecuta como un solo programa en modo kernel. El sistema operativo se escribe como una colección de procedimientos, enlazados entre sí en un solo programa binario ejecutable extenso. Cuando se utiliza esta técnica, cada procedimiento en el sistema tiene la libertad de llamar a cualquier otro, si éste proporciona cierto cómputo útil que el primero necesita. Al tener miles de procedimientos que se pueden llamar entre sí sin restricción, con frecuencia se produce un sistema poco manejable y difícil de comprender. \\
+
+  \noindent
+  Para construir el programa objeto actual del sistema operativo cuando se utiliza este diseño, primero se compilan todos los procedimientos individuales (o los archivos que contienen los procedimientos) y luego se vinculan en conjunto para formar un solo archivo ejecutable, usando el enlazador del sistema. En términos de ocultamiento de información se oculta dentro de módulos y sólo los puntos de entrada designados de manera oficial se pueden llamar desde el exterior del módulo). \\
+
+  \noindent
+  Para solicitar los servicios (llamadas al sistema) que proporciona el sistema operativo, los parámetros se colocan en un lugar bien definido (por ejemplo, en la pila) y luego se ejecuta una instruccion de trap. Esta instrucción cambia la máquina del modo usuario al modo kernel y transfiere el control al sistema operativo, despues, el sistema operativo obtiene los parámetros y determina cuál es la llamada al sistema que se va a llevar a cabo. Por ultimo la indexa en una tabla que contiene en la ranura k un apuntador al procedimiento que lleva a cabo la llamada al sistema k. \\
+
+  \noindent
+  Esta organización sugiere una estructura básica para el sistema operativo:
+
+  \begin{enumerate}
+    \item Un programa principal que invoca el procedimiento de servicio solicitado.
+    \item Un conjunto de procedimientos de servicio que llevan a cabo las llamadas al sistema.
+    \item Un conjunto de procedimientos utilitarios que ayudan a los procedimientos de servicio.
+  \end{enumerate}
+
+  \noindent
+  En este modelo, para cada llamada al sistema hay un procedimiento de servicio que se encarga de la llamada y la ejecuta. Los procedimientos utilitarios hacen cosas que necesitan varios procedimientos de servicio, como obtener datos de los programas de usuario. Estos procedimientos se dividen en tres niveles.
+
+  \begin{itemize}
+    \item Procedimiento principal.
+    \item Procedimientos de servicio.
+    \item Procedimientos utilitarios.
+  \end{itemize}
+
+  \noindent
+  Además del núcleo del sistema operativo al arrancar el ordenador, muchos sitemas operativos soportan extensiones que se pueden cargar, como los drivers de dispositivos de E/S y sistemas de archivos. Estos componentes se cargan por demanda.
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Punto 1.7.2 Tanenbaum
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  \section{Sistemas de capas}
+
+  \noindent
+  Se organizar el sistema operativo como una jerarquía de capas, construyendo cada capa encima de la que tiene abajo. El primer sistema construido de esta forma fue el sistema THE, construido en Technische Hogeschool Eindhoven en Holanda por E. W. Dijkstra (1968) y sus estudiantes. El sistema THE era un sistema simple de procesamiento por lotes para una computadora holandesa, la Electrologica X8, que tenía 32K de palabras de 27 bits (los bits eran costosos en aquel entonces). \\
+
+  \noindent
+  El sistema tenía seis capas. El nivel 0 se encargaba de la asignación del procesador, de cambiar entre un proceso y otro cuando ocurrían interrupciones o expiraban los temporizadores. Por encima del nivel 0, el sistema consistía en procesos secuenciales, cada uno de los cuales e podía programar sin necesidad de preocuparse por el hecho de que había varios procesos en ejecución en un solo procesador. En otras palabras, el nivel 0 proporcionaba la multiprogramación básica de la CPU. \\
+
+  \noindent
+  La capa 1 se encargaba de la administración de la memoria. Asignaba espacio para los procesos en la memoria principal y en un tambor de palabras de 512 K que se utilizaba para contener partes de procesos (páginas), para los que no había espacio en la memoria principal. Por encima de la capa 1, los procesos no tenían que preocuparse acerca de si estaban en memoria o en el tambor; el software de la capa 1 se encargaba de asegurar que las páginas se llevaran a memoria cuando se requerían. \\
+
+  \noindent
+  La capa 2 se encargaba de la comunicación entre cada proceso y la consola del operador (es decir, el usuario). Encima de esta capa, cada proceso tenía en efecto su propia consola de operador. La capa 3 se encargaba de administrar los dispositivos de E/S y de guardar en búferes los flujos de información dirigidos para y desde ellos. Encima de la capa 3, cada proceso podía trabajar con los dispositivos abstractos de E/S con excelentes propiedades, en vez de los dispositivos reales con muchas peculiaridades. La capa 4 era en donde se encontraban los programas de usuario. No tenían que preocuparse por la administración de los procesos, la memoria, la consola o la E/S. El proceso operador del sistema se encontraba en el nivel 5. \\
+
+  \noindent
+  Una mayor generalización del concepto de capas estaba presente en el sistema MULTICS. En vez de capa, MULTICS se describió como una serie de anillos concéntricos, en donde los interiores tenían más privilegios que los exteriores (que en efecto viene siendo lo mismo). Cuando un procedimiento en un anillo exterior quería llamar a un procedimiento en un anillo interior, tenía que hacer el equivalente de una llamada al sistema; es decir, una instrucción TRAP cuyos parámetros se comprobara cuidadosamente que fueran válidos antes de permitir que continuara la llamada. Aunque todo el sistema operativo era parte del espacio de direcciones de cada proceso de usuario en MULTICS, el hardware hizo posible que se designaran procedimientos individuales (en realidad, segmentos de memoria) como protegidos contra lectura, escritura o ejecución. \\
+
+  \noindent
+  Mientras que en realidad el esquema de capas de THE era sólo una ayuda de diseño, debido a que todas las partes del sistema estaban enlazadas entre sí en un solo programa ejecutable, en MULTICS el mecanismo de los anillos estaba muy presente en tiempo de ejecución y el hardware se encargaba de implementarlo. La ventaja del mecanismo de los anillos es que se puede extender fácilmente para estructurar los subsistemas de usuario. Por ejemplo, un profesor podría escribir un programa para evaluar y calificar los programas de los estudiantes, ejecutando este programa en el anillo n, mientras que los programas de los estudiantes se ejecutaban en el anillo n+1 y por ende no podían cambiar sus calificaciones.
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Punto 1.7.3 Tanenbaum
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  \section{Microkernels}
+
+  Con el diseño de capas, los diseñadores podían elegir en dónde dibujar el límite entre kernel y usuario. Tradicionalmente todas las capas iban al kernel, pero eso no es necesario. De hecho, puede tener mucho sentido poner lo menos que sea posible en modo kernel, debido a que los errores en el kernel pueden paralizar el sistema de inmediato. En contraste, los procesos de usuario se pueden configurar para que tengan menos poder, por lo que un error en ellos tal vez no sería fatal. \\
+
+  \noindent
+  La idea básica detrás del diseño de microkernel es lograr una alta confiabilidad al dividir el sistema operativo en módulos pequeños y bien definidos, sólo uno de los cuales (el microkernel) se ejecuta en modo kernel y el resto se ejecuta como procesos de usuario ordinarios, sin poder relativamente. En especial, al ejecutar cada driver de dispositivo y sistema de archivos como un proceso de usuario separado, un error en alguno de estos procesos puede hacer que falle ese componente, pero no puede hacer que falle todo el sistema. Así, un error en el driver del dispositivo de audio hará que el sonido sea confuso o se detenga, pero la computadora no fallará. En contraste, en un sistema monolítico con todos los drivers en el kernel, un driver de audio con errores puede hacer fácilmente referencia a una dirección de memoria inválida y llevar a todo el sistema a un alto rotundo en un instante. \\
+
+  \noindent
+  Se han implementado y desplegado muchos microkernels. Son en especial comunes en las aplicaciones en tiempo real, industriales, aeronáuticas y militares que son de misión crítica y tienen requerimientos de confiabilidad muy altos. Algunos de los microkernels mejor conocidos son Integrity, K42, L4, PikeOS, QNX, Symbian y MINIX 3. \\
+
+  \noindent
+  MINIX 3 ha llevado la idea de la modularidad hasta el límite, dividiendo la mayor parte del sistema operativo en varios procesos independientes en modo usuario. Es un sistema de código fuente abierto en conformidad con POSIX. Su microkernel sólo tiene cerca de 3200 líneas de C y 800 líneas de ensamblador para las funciones de muy bajo nivel, como las que se usan para atrapar interrupciones y conmutar proceso. El código de C administra y planifica los procesos, se encarga de la comunicación entre procesos (al pasar mensajes entre procesos) y ofrece un conjunto de aproximadamente 35 llamadas al kernel para permitir que el resto del sistema operativo realice su trabajo. Estas llamadas realizan funciones tales como asociar los drivers a las interrupciones, desplazar datos entre espacios de direcciones e instalar nuevos mapas de memoria para los procesos recién creados. El manejador de dispositivo para el reloj también está en el kernel, debido a que el planificador interactúa de cerca con él. Todos los demás dispositivos controladores se ejecutan como procesos de usuario separados. \\
+
+  \noindent
+  Fuera del kernel, el sistema se estructura como tres capas de procesos, todos se ejecutan en modo usuario. La capa más inferior contiene los drivers de dispositivos. Como todos se ejecutan en modo usuario, no tienen acceso físico al espacio de puertos de E/S y no pueden emitir comandos de E/S directamente por lo que para programar un dispositivo de E/S el driver crea una estructura para indicarle qué valores debe escribir en cuáles puertos de E/S y realiza una llamada al kernel para indicarle que realice la escritura con lo que se permite que el kernel compruebe que el driver esté escribiendo (o leyendo) de la E/S que está autorizado a utilizar. En consecuencia (y a diferencia de un diseño monolítico), un driver de audio defectuoso no puede escribir accidentalmente
+  en el disco. \\
+
+  \noindent
+  Encima de los drivers hay otra capa en modo usuario que contiene los servidores, que realizan la mayor parte del trabajo del sistema operativo. Uno o más servidores de archivos administran el (los) sistema(s) de archivos, el administrador de procesos crea, destruye y administra los procesos y así sucesivamente. Los programas de usuario obtienen servicios del sistema operativo mediante el envío de mensajes cortos a los servidores, pidiéndoles las llamadas al sistema POSIX. Por ejemplo, un proceso que necesite realizar una llamada read envía un mensaje a uno de los servidores de archivos para indicarle qué debe leer. \\
+
+  \noindent
+  Un servidor interesante es el servidor de reencarnación, cuyo trabajo es comprobar si otros servidores y drivers están funcionando en forma correcta. En caso de que se detecte uno defectuoso, se reemplaza automáticamente sin intervención del usuario. De esta forma, el sistema es autocorregible y puede lograr una alta confiabilidad. \\
+
+  \noindent
+  El sistema tiene muchas restricciones que limitan el poder de cada proceso. Como dijimos antes, los drivers sólo pueden utilizar los puertos de E/S autorizados, pero el acceso a las llamadas al kernel también está controlado dependiendo del proceso, al igual que la habilidad de enviar mensajes a otros procesos. Además, los procesos pueden otorgar un permiso limitado a otros procesos para hacer que el kernel acceda a sus espacios de direcciones. Como ejemplo, un sistema de archivos puede otorgar permiso al dispositivo controlador de disco para dejar que el kernel coloque un bloque de disco recién leído en una dirección específica dentro del espacio de direcciones del sistema de archivos. El resultado de todas estas restricciones es que cada driver y servidor tiene el poder exacto para realizar su trabajo y no más, con lo cual se limita en forma considerable el daño que puede ocasionar un componente defectuoso. \\
+
+  \noindent
+  Una idea que está en parte relacionada con tener un kernel mínimo es colocar el mecanismo para hacer algo en el kernel, pero no la directiva. Para aclarar mejor este punto, considere la planificación de los proceso. Un algoritmo de planificación relativamente simple sería asignar una prioridad a cada proceso y después hacer que el kernel ejecute el proceso de mayor prioridad que sea ejecutable. El mecanismo, en el kernel, es buscar el proceso de mayor prioridad y ejecutarlo. La directiva, asignar prioridades a los procesos, puede realizarse mediante los procesos en modo usuario. De esta forma, la directiva y el mecanismo se pueden desacoplar y el kernel puede reducir su tamaño.
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Punto 1.7.4 Tanenbaum
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  \section{Modelo cliente-servidor}
+
+  \noindent
+  Una ligera variación de la idea del microkernel es diferenciar dos clases de procesos: los servidores, cada uno de los cuales proporciona cierto servicio, y los clientes, que utilizan estos servicios. Este modelo se conoce como cliente-servidor. A menudo la capa inferior es un microkernel, pero eso no es requerido. La esencia es la presencia de procesos cliente y procesos servidor. \\
+
+  \noindent
+  La comunicación entre clientes y servidores se lleva a cabo comúnmente mediante el paso de mensajes. Para obtener un servicio, un proceso cliente construye un mensaje indicando lo que desea y lo envía al servicio apropiado. Después el servicio hace el trabajo y envía de vuelta la respuesta. \\
+
+  \noindent
+  Una generalización obvia de esta idea es hacer que los clientes y los servidores se ejecuten en distintas computadoras, conectadas mediante una red de área local o amplia. Como los clientes se comunican con los servidores mediante el envío de mensajes, no necesitan saber si los mensajes se manejan en forma local en sus propios equipos o si se envían a través de una red a servidores en un equipo remoto. En cuanto a lo que al cliente concierne, lo mismo ocurre en ambos casos: se envían las peticiones y se regresan las respuestas. Por ende, el modelo cliente-servidor es una abstracción que se puede utilizar para un solo equipo o para una red de equipos.
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Punto 1.7.5 Tanenbaum
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  % \section{Máquinas virtuales}
+  %
+  % \noindent
+  % \subsection{VM/370}
+  % Sistema de tiempo compartido que proporciona multiprogramación y una máquina extendida con una interfaz más conveniente que el hardware por si solo. El corazón del sistema, que se conoce como monitor de máquina virtual, se ejecuta en el hardware solamente y realiza la multiprogramación, proporcionando no una, sino varias máquinas virtuales a la siguiente capa hacia arriba. A diferencia de otros sistemas operativos, estas máquinas virtuales no son máquinas extendidas, con archivos y otras características adecuadas. En vez de ello, son copias exactas del hardware incluyendo el modo kernel/usuario, la E/S, las interrupciones y todo lo demás que tiene la máquina real. \\
+  %
+  % \noindent
+  % Como cada máquina virtual es idéntica al verdadero hardware, cada una puede ejecutar cualquier sistema operativo que se ejecute directamente sólo en el hardware. Distintas máquinas virtuales pueden ejecutar distintos sistemas operativos.
+
+  \chapter{Tema 2:}
+
+
+\end{document}
