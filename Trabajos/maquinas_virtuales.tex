@@ -1,0 +1,551 @@
+\documentclass[10pt,a4paper,spanish]{report}
+
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amsthm}
+\usepackage{amsfonts, amssymb, latexsym}
+\usepackage{enumerate}
+\usepackage[official]{eurosym}
+\usepackage{graphicx}
+\usepackage[usenames, dvipsnames]{color}
+\usepackage{colortbl}
+\usepackage{multirow}
+\usepackage{fancyhdr}
+\usepackage[all]{xy}
+\usepackage{minted}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{algpseudocode}
+
+\pgfplotsset{compat=1.5}
+
+% a4large.sty -- fill an A4 (210mm x 297mm) page
+% Note: 1 inch = 25.4 mm = 72.27 pt
+%       1 pt = 3.5 mm (approx)
+
+% vertical page layout -- one inch margin top and bottom
+\topmargin      0 mm    % top margin less 1 inch
+\headheight     0 mm    % height of box containing the head
+\headsep       10 mm    % space between the head and the body of the page
+\textheight   250 mm
+\footskip      14 mm    % distance from bottom of body to bottom of foot
+
+% horizontal page layout -- one inch margin each side
+%\oddsidemargin    0   mm    % inner margin less one inch on odd pages
+%\evensidemargin   0   mm    % inner margin less one inch on even pages
+%\textwidth      159.2 mm    % normal width of text on page
+
+\usepackage[math]{iwona}
+\usepackage[T1]{fontenc}
+\usepackage{inconsolata}
+
+\usepackage[pdftex, bookmarks=true,
+bookmarksnumbered=false, % true means bookmarks in
+% left window are numbered
+bookmarksopen=false,     % true means only level 1
+% are displayed.
+colorlinks=true,
+linkcolor=webblue]{hyperref}
+
+\definecolor{webgreen}{rgb}{0, 0.5, 0} % less intense green
+\definecolor{webblue}{rgb}{0, 0, 0.5}  % less intense blue
+\definecolor{webred}{rgb}{0.5, 0, 0}   % less intense red
+\definecolor{dblackcolor}{rgb}{0.0,0.0,0.0}
+\definecolor{dbluecolor}{rgb}{.01,.02,0.7}
+\definecolor{dredcolor}{rgb}{0.8,0,0}
+\definecolor{dgraycolor}{rgb}{0.30,0.3,0.30}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % regla horizontal para  el titulo
+
+\pagestyle{fancy}
+%con esto nos aseguramos de que las cabeceras de capítulo y de sección vayan en minúsculas
+
+\renewcommand{\chaptermark}[1]{%
+\markboth{#1}{}}
+\renewcommand{\sectionmark}[1]{%
+\markright{\thesection\ #1}}
+\fancyhf{} %borra cabecera y pie actuales
+\fancyhead[LE,RO]{\bfseries\thepage}
+\fancyhead[LO]{\bfseries\leftmark}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0pt}
+\addtolength{\headheight}{0.5pt} %espacio para la raya
+\fancypagestyle{plain}{%
+\fancyhead{} %elimina cabeceras en páginas "plain"
+\renewcommand{\headrulewidth}{0pt} %así como la raya
+}
+
+%%%%% Para cambiar el tipo de letra en el título de la sección %%%%%%%%%%%
+\chapterfont{\fontfamily{pag}\selectfont} %% for chapter if you want
+\sectionfont{\fontfamily{pag}\selectfont}
+\subsectionfont{\fontfamily{pag}\selectfont}
+\subsubsectionfont{\fontfamily{pag}\selectfont}
+
+\renewcommand{\labelenumi}{\arabic{enumi}. }
+\renewcommand{\labelenumii}{\labelenumi\alph{enumii}) }
+\renewcommand{\labelenumiii}{\labelenumii\roman{enumiii}: }
+
+\newmintedfile[myC]{c}{
+  linenos,
+  numbersep=5pt,
+  gobble=0,
+  frame=lines,
+  framesep=2mm,
+  fontsize=\footnotesize
+}
+
+\title{Sistemas Operativos}
+\author{David Sánchez Jiménez}
+
+\begin{document}
+  \begin{titlepage}
+    \begin{center}
+      \HRule \\[0.8cm]
+      \textsc{\huge Máquinas Virtuales\\[0.5cm]}\\[1.6cm]
+      \HRule \\[1cm]
+      \begin{flushleft}
+        \emph{Hecho por:}\\
+         David Sánchez Jiménez
+      \end{flushleft}
+      \vspace{12cm}
+      \large{\today}\\
+      \vspace{0.5cm}
+      \htmladdnormallink{\includegraphics[width=2cm]{88x31.png}}
+      {http://creativecommons.org/licenses/by-nc/4.0/}\\[0.5cm]
+      \texttt{Máquinas Virtuales\\ by
+      \href{mailto:dasaji92@gmail.com}{David Sánchez Jiménez}
+      is licensed under a \htmladdnormallink{Creative Commons
+      Reconocimiento-NoComercial-CompartirIgual 4.0 \\Internacional License}
+      {http://creativecommons.org/licenses/by-nc/4.0/}}.\\[3mm]
+    \end{center}
+  \end{titlepage}
+
+  \tableofcontents
+  \newpage
+
+  \chapter{Introducción}
+
+  \noindent
+  Debido al incremento de implementaciones de servidores y estaciones de trabajo se generaron problemas operacionales y de infraestructura dentro de los que se incluye el tener varios servidores con un uso muy bajo de su capacidad, lo cual conllevaba una pérdida de dinero a los inversores como puede ser el coste de gestionar una infraestructura cada vez más grande o el renovar cada cierto tiempo un hardware que apenas tiene uso. A esto hay que sumarle mantenimiento de las estaciones de trabajo de los usuarios finales, el cual es muy elevado debído a que controlar un entorno de máquinas distribuidas a las cuales aplicar políticas de gestión, acceso y seguridad sin perjudicar la capacidad del usuario de poder trabajar con eficacia, algo que es muy complejo y costoso. \\
+
+  \noindent
+  El propósito fundamental de la virtualización es simplificar estos problemas, con lo que se puede utilizar un sólo servidor en lugar de varios, reduciendo costes en cableado, energía electrica, refrigeración, menor ocupación del espacio por lo que algunas empresas toman la virtualización como una solución alternativa a sus necesidades.
+
+  \section{Definición de máquina virtual}
+
+  \noindent
+  El concepto de máquina virtual surge con el sistema VM/370 de IBM en 1972. La idea principal es la de permitir ejecutar varios sistemas operativos simultáneamente sobre el mismo hardware. Para ello separa las dos funciones básicas que realiza un sistema de tiempo compartido: multiprogramación y abstracción del hardware. \\
+
+  \noindent
+  Las computadoras modernas son una de las estructuras más avanzadas del diseño humano y sólo son posibles gracias a nuestra habilidad para manejar una complejidad extrema la cual manejamos mediante la división en los niveles de abstracción separados por interfaces bien definidas, los cuales permiten que los detalles de implementación en niveles más bajos de un diseño puedan ser ignorados o simplificados para facilitar el diseño de componentes en los niveles más altos. Estos niveles de abstracción son organizados en una jerarquía en la cual los niveles más altos se llevan a cabo en el software y los más bajos en el hardware. La virtualización se encarga de los niveles cercanos a la frontera hardware/software. \\
+
+  \noindent
+  La diferencia entre la virtualización y la abstracción es que la virtualización no necesariamente oculta detalles, el nivel de detalles del sistema virtual es casi siempre el mismo que el del sistema real. \\
+
+  \newpage
+  \noindent
+  Pero el concepto de virtualización no sólo puede ser aplicado a subsistemas como discos, memorias, red sino también a máquinas enteras. Una máquina virtual se implementa agregando una capa de software a la máquina real para soportar el diseño de arquitectura de la máquina virtual. En general, una máquina virtual puede ocultar las exigencias de compatibilidad de la máquina real y de los recursos de hardware para obtener un grado más alto de portabilidad de software y flexibilidad. \\
+
+  \noindent
+  Existe una amplia variedad de máquinas virtuales las cuales aportan una amplia variedad de beneficios. Se pueden implementar múltiples máquinas virtuales replicadas en una plataforma hardware para proporcionar a cada usuario o grupo de usuarios sus propios entornos de sistemas operativos. Los diferentes entornos de sistema tambien proporcionan aislamiento y seguridad mejorada. Un gran servidor multiprocesador puede dividirse en servidores virtuales más pequeños manteniendo la capacidad de balancear el uso de los recursos a través del sistema. Las máquinas virtuales también pueden usar técnicas de emulación para soportar compatibilidad multiplataforma haciendo que el software escrito para una plataforma se ejecute en otra. Además de la emulación las máquinas virtuales pueden proporcionar optimizaciones dinámicas de los binarios de los programas. También se pueden inventar máquinas virtuales a la medida de cualquier lenguaje de alto nivel, donde los programas escritos en estos lenguajes se compilan en binarios dirigidos a la máquina virtual, por lo que cualquier máquina real para la que exista una implementación de la máquina virtual puede ejecutar dicho código compilado, como es el ejemplo de Java y su JVM.
+
+  \chapter{Características}
+
+  \noindent
+  Una máquina virtual desde la perspectiva de un proceso que ejecuta un programa usuario, consiste en un espacio de direcciones lógicas de memoria al que se le ha asignado un proceso junto con los registros de usuarios y las instrucciones que permiten la ejecución del código que pertenece al proceso. \\
+
+  \noindent
+  Por lo tanto podemos decir que una máquina virtual de procesos se ejecuta como un proceso normal dentro de un sistema operativo y soporta un sólo proceso. La máquina se inicia automáticamente cuando se lanza el proceso que se desea ejecutar y se para cuando éste finaliza. Su objetivo es el de proporcionar un entorno de ejecución independiente de la plataforma de hardware y del sistema operativo que oculta los detalles de la plataforma subyacente y permita que un programa se ejecute siempre de la misma forma sobre cualquier plataforma.\\
+
+  \noindent
+  El ejemplo más conocido actualmente de este tipo de máquina virtual es la máquina virtual de Java o JVM. Otra máquina virtual muy conocida es la del entorno .Net de Microsoft que se llama "Common Language Runtime". \\
+
+  \noindent
+  Una máquina virtual desde la perspectiva de un sistema operativo es un ambiente de ejecución completo alojado en una máquina real que soporta un número de procesos simultaneos pertenecientes a usuarios diferentes. Todos estos procesos comparten el sistema de archivos y otros recursos de entrada/salida. Este es persistente, excepto que se reinicie, almacena los procesos en memoria física y los recursos de entrada/salida y permite que éstos interactúen con otros recursos a través del sistema operativo que es parte del sistema. \\
+
+  \noindent
+  En la práctica una máquina virtual ejecuta un software el cual puede ser o un proceso o un sistema completo, dependiendo del típo de máquina. La máquina virtual se implementa como una combinación de máquina real y de un software de virtualización.\\
+
+  \noindent
+  El isomorfismo del proceso de virtualización consiste en dos partes:
+
+  \begin{enumerate}
+    \item Mapeo de recursos virtuales. Puede ser un registro de memoria o archivos o recursos reales de una computadora.
+    \item El uso de instrucciones y/o llamadas del sistema de la máquina real para llevar a cabo las acciones definidas por las instrucciones y/o llamadsas del sistema de la máquina virtual.
+  \end{enumerate}
+
+  \noindent
+  En una máquina virtual de proceso, el software de virtualización está en la interfaz ABI encima de la combinación de hardware y Sistema Operativo. El software de virtualización emula tanto instrucciones de nivel de usuario como llamadas al sistema operativo. \\
+
+  \noindent
+  En una máquina virtual de sistema, el software de virtualización se encuentra entre el hardware de la máquina y el software convencional. En este caso, el software de virtualización emula el hardware ISA para que el software convencional vea un ISA diferenteal soportado por el hardware. En muchos sistemas el guest y el host ejecutan el mismo ISA.
+
+  \section{Características de máquina virtual de proceso}
+
+  \noindent
+  Lás máquinas virtuales a nivel de proceso proporcionan a las aplicaciones de usuario una interfaz ABI. En sus varias implementaciones pueden proporcionar replicación, emulación y optimización.
+
+  \subsection{Multiprogramación}
+
+  \noindent
+  La cmbinación de la interfaz de las llamadas al sistema operativo y del conjunto de instrucciones de usuario forma la máquina que ejecuta un proceso usuario. La mayoría de los sitemas operativos pueden soportar múltiples procesos usuarios corriendo simultáneamente debido a la característica de multiprogramación donde cada proceso usuario tiene la ilusión de tener una máquina completa para él sólo. Cada proceso tiene su propio espacio de direcciones y acceso a la estructura de archivos.\\
+
+  \noindent
+  El sistema operativo es el que comparte el hardware y administra los recursos para hacer esto posible, proporcionando una máquina virtual o nivel de proceso para cada una de las aplicaciones que ejecuta concurrentemente.
+
+  \subsection{Emuladores y Traductores Binarios}
+
+  \noindent
+  Un problema desafiante para una máquina virtual de proceso es soportar programas binarios compilados para un conjunto de instrucciones distintas que las que son ejecutadas por el hardware del Host. El sistema operativo sobre el que se ejecuta el programa binario puede ser el mismo que aquel sobre el que se ejecuta normalmente aunque compilado para una arquitectura distinta. \\
+
+  \noindent
+  El método de emulación más real es la interpretación. Un programa interprete ejecuta las ISA destino, descodifica y emula la ejecución de instrucciones fuentes. Esto puede ser un proceso lento si se necesita que cada instrucción destino sea interpretada.
+  Para mejorar el rendimiento se usa la traducción binaria la cual toma un bloque de instrucciones fuente y lo convierte a las instrucciones destino que ejecutan funciones equivalentes las cuales son almacenadas y ejecutadas mucho más rápido que si son interpretadas. Así es como funcionan los traductores binarios y esta es una característica muy importante de máquina virtual de proceso.\\
+
+  \noindent
+  La interpretación y la traducción binaria tienen características de rendimiento distinto ya que la interpretación tiene una baja sobrecarga inicial pero consume mucho tiempo debido a que la instrucción es emulada y la traducción binaria tiene una alta sobrecarga inicial cuando realiza las traducciones pero es más rápida para cada una de las ejecuciones repetidas.
+  En consecuencia, algunas máquinas virtuales usan estrategia de emulación combinando con la técnica profiling, la cual consiste en que inicialmente un bloque de instrucciones fuente son interpretadas y profiling se encarga de determinar que secuencia de instrucciones son las que se ejecutan con más frecuencia. A continuación el bloque ejecutado frecuentemente puede ser traducido. En la mayoría de las máquinas virtuales las fases de interpretación y traducción binaria ocurren por encima del curso de ejecución de un programa.
+
+  \subsection{Optimizadores binarios para ISA iguales}
+
+  \noindent
+  La mayoría de los optimizadores binarios dinámicos no solo traducen código fuente a destino sino tambñen realizan operaciones en el código. Esto se da en máquinas donde el conjunto de instrucciones utilizadas por el Host y el Gest es el mismo y la optimización de un programa binario es el propósito de la máquina virtual. Los optimizadores binarios para ISA iguales son implementados de una manera similar a emular máquinas virtuales, incluyendo optimización y software de código optimizado almacenado. Un ejemplo de optimizador binario dinámico es el \"Dynamo System\" de HP.
+
+  \subsection{Máquina virtual de lenguaje de alto nivel}
+
+  \noindent
+  Para las máquinas virtuales de proceso la portabilidad multiplataforma es un objetivo muy importante ya que supondria poder ejecutar programas que usan un ISA sobre una máquina con otro ISA diferente. El problema se presenta si la plataforma del host corre un sistema operativo diferente y algún programa binario compilado iriginalmente se quiera ejecutar en él. Por ejemplo si se quiere ejecutar binarios IA-32 en una plataforma MIPS se tendría que desarrollar una máquina virtual para esto. \\
+
+  \noindent
+  La compatibilidad multiplataforma está diseñada para facilitar la portabilidad y coincidir con las características de un lenguaje de alto nivel usado para el desarrollo de aplicaciones. Estas máquinas virtuales de alto nivel son similares a las máquinas virtuales de proceso descritas antes, sin embargo estas minimizan las características específicas del hardware y del sistema operativo ya que éstas compromenten la independencia de la plataforma. \\
+
+  \noindent
+  En un sistema convencional, un compilador realiza un análisis léxico, sintáctico y semántico para generar el código intermedio, similar al código de máquina pero más abstracto. Este código intermedio no contiene registros asignados. El archivo binario es ejecutado y distribuido en máquinas que soporten esa combinación de ISA y sistema operativo, por lo que para ejecutar el programa en una plataforma diferente debe ser recompilado para dicha plataforma. \\
+
+  \noindent
+  En una máquina virtual este proceso cambia ya que el compilador genera un código de máquina abstracto similar a código intermedio, el cual es distribuido para las diferentes plataformas. En este proceso la máquina virtual contiene un intérprete que toma cada instrucción, la decodifica y luego realiza la transformación de estado requerida.\\
+
+  \noindent
+  Básicamente, existen dos grandes formas de ejecutar programas: programas compilados (deben haber pasado previamente por un compilador) y programas interpretados (necesitan pasar por un intérprete para ejecutarse en tiempo real). \\
+
+  \noindent
+  La ventaja de los lenguajes de alto nivel es que se pueden portar fácilmente una vez que la máquina virtual se ha implementado en la plataforma de destino. Además es mucho más simple desarrollar este lenguaje que desarrollar un compilador para cada plataforma y recompilarlo para cada aplicación cada vez que la es portada.
+
+  \newpage
+  \section{Características de máquina virtual de sistema}
+
+  \noindent
+  Una máquina virtual de sistema consiste en un sistema compilado en el cual algunos procesos pueden pertenecer a múltiples usuarios y coexistir. Estos tipos de máquinas fueron desarrollados en los años 60/70 y fueronlas originarias de las máquinas virtuales. En un sistema de virtualización un simple host puede soportar múltiples sistemas operativos gest simultaneamente y distintos. \\
+
+  \noindent
+  Una de las características de los sistemas de virtualización actuales es que proporcionan una manera segura de dividir el software que corre simultáneamente en la misma plataforma de hardware. El software que corre en el sistema guest es aislado de los softwares que corren en otros guest. Además si la seguridad de un guest se ve comprometida o si sufre alguna falla, los sisemas de los otros guest no se ven afectados. La replicación de plataforma es una característica muy umportante de la virtualización. El problema está en dividir los recursos de hardware entre ambientes de sistemas operativos guest múltiples.\\
+
+  \noindent
+  El VMM (Monitor de Máquina Virtual) tiene acceso y administra los recursos de hardware. El sistema operativo imvitado y las aplicaciones compiladas por este sistema operativo son administrados y están bajo el control del hypervisor. Cuando un sistema operativo guest realiza ciertas operaciones como instrucciones con privilegios que directamente invocan a los recursos de hardware compartidos, esta operación es interceptada por el hypervisor, verificada y realizada por el hypervisor del guest.
+
+
+  \subsection{Emulación de una máquina virtual de sistema completo}
+
+  \noindent
+  En las máquinas virtuales definidas anteriormente, todos los softwares de sistemas (gest o host) y softwares de aplicación usan la misma ISA que el hardware principal. Para poder correr estos softwares en ISA diferentes el software de máquina virtual debe emular el hardware entero. Tiene que llevar a cabo la emulación de toodas las instrucciones y debe convertir las operaciones del ISA del sistema invitado a llamadas al sistema operativo equivalentes hechas en el sistema operativo anfitrión.
+
+  \subsection{Implementaciones de máquina virtual de sistema}
+
+  \noindent
+  Desde el punto de vista del usuario los sistemas de virtaulización proporcionan más o menos la misma funcionalidad, la diferencia es la manera en la que se llevan a cabo. \\
+
+  \noindent
+  Según la arquitectura de VMM clásico, una alternativa es cuando el hypervisor se ejecuta sobre el hardware y las máquinas virtuales se ubican sobre este. El hypervisor corre en el modo más privilegiado y mientras el resto de los sistemas operativos guest corren en un modo con menor privilegio. Esta es la manera más transparente y el hypervisor puede interceptar e implementar las acciones específicas de los sistemas operativos invitados que interactúan con los recursos de hardware. \\
+
+  \noindent
+  La arquitectura VMM es muy eficiente y provee servicios a todos los sistemas invitados más o menos de manera equivalente. Una desventaja de esta técnica es que requiere que el sistema este limpio y que se instala primero el VMM y luego los sistemas operativos invitados por encima. Otra desventaja es que los controladores deben estar disponibles en el momento de la instalación del VMM porque éste interactua directamente con los dispositivos de entrada/salida. \\
+
+  \newpage
+  \noindent
+  La segunda alternativa de la implementación del VMM es cuando éste se ejecuta sobre el sistema operativo anfitrión. La desventaja de esta alternativa es que se incluye una capa intermedia más, lo que hace menos eficiente el proceso de virtualización cuando un servicio de sistema operativo es solicitado. \\
+
+  \noindent
+  En este esquema cada máquina virtual puede ejecutar cualquier sistema operativo soportado por el hardware subyacente. Así los usuarios pueden ejecutar dos o más sistemas operativos distintos simultáneamente en máquinas "privadas" virtuales.\\
+
+  \noindent
+  Para que el hypervisor se ejecute con más o menos privilegios se utiliza un mecanismo de seguridad que permite proteger datos y funcionalidades frente a fallas y comportamientos maliciosos denominado "Anillos de protección" o también conocidos como "Dominios de protección jerárquicos". Este sistema se basa en cuatro niveles de prioridad que a menudo se representan como anillos concéntricos donde quien esté más al centro tiene poder soblre los que están más a la periferia.
+
+  \begin{itemize}
+    \item \textbf{Nivel -1: } Hypervisor
+    \item \textbf{Nivel 0: } Nucleo del SO
+    \item \textbf{Nivel 1: } Controladores de dispositivo y servicios del sistema
+    \item \textbf{Nivel 2: } Extensiones del sistema operativo
+    \item \textbf{Nivel 3: } Aplicaciones de usuario
+  \end{itemize}
+
+  \noindent
+  El sistema operativo puede utilizar todas las instrucciones disponibles porque se ejecuta en modo supervisor en el anillo 0. Como el anillo 3 depende del anillo 0, cualquier inestabilidad en el anillo 0 repercute en el modo usuario. Para aislar el anillo 0 de cada máquina virtual es necesario mover el anillo 0 lo más cerca posible de la VM. De esta forma cualquier fallo en el anillo 0 desplazado de una VM no repercute en el anillo 0 nativo y por lo tanto tampoco sobre otras máquinas virtuales. Cuanto más lejos esté ubicado el anillo 0 desplazado del anillo 0 nativo, menos rendimiento se obtiene. La virtualización ubica el VMM en el anillo 0 nativo y desplaza hacia arriba el anillo 0 de las máquinas virtuales.\\
+
+  \noindent
+  Existen dos tipos de hypervisor:
+  \begin{itemize}
+    \item \textbf{Tipo 1: Hardware / Hypervisor VMM / Máquina virtual}
+    También conocidos como no hosted o sobre el hardware. Se ejecutan en anillo 0 nativo directamente sobre el hardware subyacente. Los sistemas operativos virtualizados se ejecutan en los anillos superiores.
+    \item  \textbf{Tipo 2: Hardware / Sistema Operativo / Hypervisor VMM / Máquina Virtual}
+    También conocidos como hosted. Se ejecutan habitualmente en el anillo 3 sobre un sistema operativo. Los VMM de tipo-2 se ejecutan en el anillo más alejado del anillo 0 nativo. Tiene como principal inconveniente el bajo rendimiento debido a las múltiples capas que deben ser atravesadas.
+  \end{itemize}
+
+  \newpage
+  \subsection{Nuevos desafios para un software de virtualización}
+
+  \noindent
+  Algunos de los desafios actuales para un software de virtualización son los siguientes:
+
+  \subsubsection{Uso de memoria privada para uso exclusivo de VMM:}
+
+  \noindent
+  Para almacenar información del sistema, el VMM debe usar bloques privados de memoria a los que solo el puede acceder. El problema es cómo asignar esta memoria de tal manera que el sistema operativo invitado no tenga acceso a ella. La solución principal es que el VMM pueda interceptar los accesos a estas áreas de memoria y emular el resultado esperado del acceso inicial. Este engorroso proceso es requerido por el hardware que no soporta virtualización. En procesadores que si soportan virtualización, ciertas páginas de memoria usadas por VMM pueden ser accesibles sólo por el software de virtualización, ya que tiene el mayor nivel de privilegio. Este paso hace que las áreas inaccesibles y más importantes sean invisibles para los demas.
+
+  \subsubsection{Uso del manejo de interrupciones VMM:}
+
+  \noindent
+  Las interrupciones que requieren la inmediata atención del sistema deben ser manejadas por VMM. El problema es que los sistemas operativos tienen la capacidad de impedir la entrega de las interrupciones. Este mecanismo se utiliza para bloquear las interrupciones de algunas actividades que deben realizarse sin la interferencia de un evento externo. VMM puede gestionar el flujo de las interrupciones de los sistemas operativos invitados, pero para ello tienen que monitorizar este flujo para poder bloquear y permitir dichas interrupciones. Algunos sistemas operativos hacen uso intensivo de esta característica, lo que provoca penalidades significativas en el rendimiento de VMM. \\
+
+  \noindent
+  La vitualización asistida por hardware aborda la problemática de soluciones de software mencionadas anteriormente y le permite al VMM correr fuera de la plataforma de sistemas operativos y aplicaciones sin tener que recurrir a la traducción binaria o paravirtualización. Esta capacidad facilita en gran medida el despliegue de VMM y proporciona una mayor fiabilidad y manejabilidad de los sistemas operativos invitados y de las aplicaciones.
+
+  \subsubsection{Índices de utilización más altos}
+  Antes de la virtualización, los índices de utilización del servidor y almacenamiento en los centros de datos de las empresas rondaban menos del 50\%. A través de la virtualización, las cargas de trabajo pueden ser encapsuladas y transferidas a los sistemas inactivos o sin uso, lo cual significa que los sistemas existentes pueden ser consolidados.
+
+  \subsubsection{Consolidación de recursos}
+
+  \noindent
+  La virtualización permite la consolidación de múltiples recursos de TI. Más allá de la consolidación de almacenamiento, la virtualización proporciona una oportunidad para consolidad la arquitectura de sistemas, infraestructura de aplicación, datos y base de datos, interfaces, redes, escritorios, e incluso procesos de negocios, resultado en ahorros de costo y mayor eficiencia.
+
+  \subsubsection{Ahorro de energía y espacio}
+
+  \noindent
+  La electricidad requerida para que funcionen los centros de datos se ve reducido de manera significativa al igual que se ve reducido el espacio utilizado al utilizar un menor número de servidores.
+
+  \subsubsection{Recuperación en caso de desastre}
+
+  \noindent
+  La virtualización de sistemas puede incrementar la disponibilidad de los índices del nivel de servicio en general y proporcionar nuevas opciones de recuperación en caso de desastre.
+
+  \subsection{Como funciona la virtualización asistida por hardware}
+
+  \noindent
+  El hypervisor debe hacer dos cosas:
+  \begin{itemize}
+    \item Emular el entorno de hardware completo hasta el punto que el sistema operativo anfitrión no pueda decir que no posee la plataforma de hardware completo.
+    \item Debe controlar todas las circustancias inusuales que pueden surgir ya sea en el sistema operativo o en la aplicación.
+  \end{itemize}
+
+  \noindent
+  Ambas tareas se deben realizar con altos niveles de fiabilidad y bajo rendimiento. El hardware que no es compatible con virtualización basada en hardware hace que sea difícil para el VMM cumplir con estos objetivos, ya que los procesadores tradicionales fueron diseñados principalmete para ejecutar una sola instancia de un sólo sistema operativo. \\
+
+  \noindent
+  Actualmente existe procesadores y sistemas operativos modernos que aplican el concepto de niveles de privilegio, que define qué acciones pueden ser realizadas por procesos específicos y permite que el VMM funcione correctamente. A diferencia de la virtualización por software, la virtualización asistida por hardware permite a la capa de virtualización ejecutarse en un "anillo -1", es decir, con mayor prioridad que el 0, de forma que ya no es necesario engañar al sistema operativo. \\
+
+  \noindent
+  En un sistema que esté funcionando usando la arquitectura de máquina virtual que se define en esta tecnología, se distinguen dos tipos diferentes de software. Por un lado encontramos al VMM(Monitor de Máquina Virtual), que actúa como host y tiene un control absoluto sobre el microprocesador y el resto del hardware del sistema. Además el VMM es capaz de mantener el control de forma selectiva sobre determinados recursos del procesador, de la memoria física, de la gestión de interrupciones y de los accesos de entrada/salida. Por otro lado se distingue al software invitado, término bajo el que se englosan a todas las máquinas virtuales presentes en el sistema. El software invitado suele estar formado por un sistema operativo completo y las aplicaciones de modo usuario que funcionan sobre dicho sistema. Dicho conjunto funciona de forma totalmente independiente a otroas máquinas virtuales que estén funcionando en el equipo, si bien el sistema operativo de las máquinas virtuales trabaja con un nivel de privilegio reducido ya que el VMM retiene el control de los recursos del procesador y del resto del hardware. \\
+
+  \chapter{Virtualización de Servidores}
+
+  \noindent
+  La virtualización de servidores es una forma de crear una máquina virtual para que dentro de ella corra uno o varios sistemas operativos. Esta máquina virtual puede o no recibir ayuda por parte del hardware en que la corremos.
+
+  \section{Emulación de Hardware}
+
+  \noindent
+  La emulación de hardware se basa en crear máquinas virtuales que emulan el hardware de una o varias plataformas distintas de hardware. \\
+
+  \noindent
+  Primero se lleva a cabo la instalación del software de virtualización (hypervisor) y luego la instalación de cualquier otro Sistema Operativo. \\
+
+  \noindent
+  Esta aplicación que simula el hardware completo permitiendo la ejecución de los sistemas operativos sin modificar, lo que hace bajo el controlador del emulador que simula el sistema completo. Incluyendo la ejecución de las instrucciones a nivel de CPU. El emulador simula la ejecución de código binario para una CPU concreta, en un sistema real que usa un procesador y un juego de instrucciones diferentes al del sistema emulado. Incluso es posible ejecutar múltiples máquinas virtuales, cada una simulando un procesador diferente. \\
+
+  \noindent
+  Las aplicaciones en este enfoque se ejecutan en un sistema operativo gest verdaderamente aislado, uno por cada VMM, permitiendo que distints sistemas operativos se ejecuten al mismo tiempo.\\
+
+  \noindent
+  El inconveniente de este modelo de virtualización es que la simulación es muy lenta ya que para cada instrucción del sistema emulado puede ser necesario ejecutar entre 100 y 1000 instrucciones a la CPU real, por lo que la hace muy costosa y muy poco eficiente. \\
+
+  \noindent
+  Una de las ventajas es que se pueden ejecutar sistemas operativos completamente diferentes al anfitrion, además al permitir diferentes sistemas operativos ejecutándose simultáneamente se usa para ambientes de desarrollo y prueba. Se usa también este tipo de virtualización cuando se quiere mover un ambiente con sistema operativo y aplicaciones de un servidor físico a un servidor con virtualización por software.
+
+  \newpage
+  \section{Paravirtualización}
+
+  \noindent
+  Un emulador funciona como un programa normal en un sistema operativo como Linux o Windows entre otros, pero teóricamente se puede eliminar el sistema operativo anfitrión. Para que esto pueda ocurrir se necesita un software especial que funcione directamente sobre el hardware. Los programas de este tipo son conocidos como hypervisores o monitores de máquinas virtuales.\\
+
+  \noindent
+  Este hypervisor gestiona los sistemas operativos huéspedes independientemente del sistema operativo, lo que asegura que haya operaciones paralelas sin problemas. En este tipo de medios, los sistemas huéspedes no trabajan directamente con el hardware, sino que envían sus peticiones al hypervisor. Por ejemplo, si uno de los sistemas Linux huésped funciona en paralelo necesita acceso al disco, envía una peticion de acceso al hypervisor. Éste maneja entonces el acceso físico y devuelve los resultados al sistema. Para permitir que todos los invitados hablen con el hypervisor, éste les ofrece una interfaz estandarizada para el hardware físico, que la pueden usar otros programas y sistemas. Esta técnica conocida como paravirtualización tiene la ventaja de una ejecución sorprendentemente rápida comparada con otras soluciones.\\
+
+  \noindent
+  Los requisitos del sistema huésped para soportar el hypervisor son un obstáculo para la paravirtualización, ya que implican modificar el sistema operativo para incluir instrucciones relacionadas con la virtualización, cosa imposible en los sistemas Windows. Otra complicación es que el hypervisor tiene que manejar personalmente numerosas tareas del sistema operativo.
+
+  \section{Virtualización a nivel de sistema operativo}
+
+  \noindent
+  La virtualización a nivel de sistema operativo consisnte en modificar el kernel del sistema operativo para incluir los mecanismos de virtualización ganando en eficiencia. \\
+
+  \noindent
+  El servidor físico y una única instancia del sistema operativo son virtualizados en múltiples particiones aisladas, donde cada partición duplica un servidor real. El kernel se ejecutará en un único sistema operativo y proveerá esa funcionalidad del sistema operativo para cada una de las particiones.\\
+
+  \noindent
+  Los gest comparten el mismo sistema operativo que el anfitrión y todos utilizan el mismo kernel y es el kernel el que se ocupa de determinar para quién trabaja en un momento determinado. \\
+
+  \noindent
+  No permite ejecutar dos sistemas operativos simultáneamente, sino Servidores Privados Virtuales (SVP) dentro de un único servidor, es decir, es un único kernel pero que permite aislar los servidores. Cada servidor tendrá su propia red, espacio de disco, de memoria, se podrá reiniciar, así mismo tendrá limitación de uso de CPU con el fin de evitar que un servidor virtual consuma recursos de los otros. También esta tecnología se denomina como Jail, pues es extender el concepto de chroot.\\
+
+  \noindent
+  Las ventajas de este sistema son la baja carga y el uso eficiente de los recursos físicos de la máquina anfitriona. Para poder compartir los recursos del mismo núcleo, los sistemas operativos de las máquinas virtuales deben ser compatibles con los de la máquina anfitrionea. \\
+
+  \newpage
+  \noindent
+  La desventaja es que requiere cambios en el kernel de dicho sistema y que limita la elección del sistema operativo, lo que significa que ofrece el mismo sistema operativo que el host. En su versión para Linux permite crear servidores virtuales con distintas distribuciones Linux sobre un anfitrión Linux. En Windows permite crear servidores virtuales Windows sobre un anfitrión Windows. \\
+
+  \noindent
+  Otro inconveniente es que sólo permite ejecutar entornos virtuales para la misma CPU y sistema operativo y en realidad sólo hay un núcleo, de manera que si ese núcleo tiene un problema, todas las máquinas virtuales se verán afectadas.
+
+  \section{Virtualización completa}
+
+  \noindent
+  La virtualización completa usa una máquina virtual que hace de intermediaria entre el sistema invitado y el hardware real. El software de virtualización es conocido como VMM (Monitor de máquina virtual) o hypervisor.\\
+
+  \noindent
+  En este tipo de sistemas, el hypervisor se encarga de emular un sistema operativo y analiza dinamicamente el código que quiere ejecutar el sistema invitado, reemplazando las instrucciones críticas que hace falta virtualizar por nuevas secuencias de instrucciones que tiene el efecto deseado en el hardware virtual mientras que las instrucciones no críticas se ejecutan tal cual en la CPU real. \\
+
+  \noindent
+  Se puede decir que el host emula lo suficientemente bien el hardware como para que los guest puedan ser ejecutados de forma nativa, es decir, sin cambios en el kernel y además de forma completamente aislada. Se pueden ejecutar varios guest en la misma máquina y compartir eficientemente sus recursos.
+
+  \section{Infraestructuras Virtuales}
+
+  \noindent
+  Una infraestructura virtual consiste en el mapping dinámico de recursos físicos en función de las necesidades de la empresa. Una máquina virtual representa los recursos físicos de un único ordenador, mientras que una infraestructura virtual representa los recursos físicos de la totalidad del entorno de TI, aglutinando ordenadores x86, así como su red y almacenamiento asociados, en un pool unificado de recursos de TI. \\
+
+  \noindent
+  Estructuralmente, una infraestructura virtual consta de los siguientes componentes:
+
+  \begin{itemize}
+    \item Hipervisor de un solo nodo para hacer posible la virtualización de todos los ordenadores x86.
+    \item Un conjunto de servicios de infraestructura de sistemas distribuida basada en la virtualización, como gestión de recursos, para optimizar los recursos disponibles entre las máquinas virtuales.
+    \item Soluciones de automatización que proporcionen capacidades especiales para optimizar un proceso de TI concreto, como provisioning o recuperación ante desastres. Mediante la separación de la totalidad del entorno de software de su infraestructura de hardware subyacente, la virtualización hace posible la reunión de varios servidores, estructuras de almacenamiento y redes en pools compartidos de recursos que se pueden asignar de forma dinámica, segura y fiable a las aplicaciones según sea necesario. Este enfoque innovador permite a las organizaciones crear una infraestructura informática con altos niveles de utilización, disponibilidad, automatización y flexibilidad utilizando componentes básicos de servidores económicos y estándar del sector.
+  \end{itemize}
+
+  \noindent
+  Las soluciones de infraestructura virtual son ideales para entornos de producción en parte debido a que se ejecutan en servidores y escritorios estándar de la industria y son compatibles con una amplia gama de sistemas operativos y entornos de aplicación, así como de infraestructuras de red y almacenamiento. Se han diseñado las soluciones para que funcionen de manera independiente del hardware y del sistema operativo y poder brindar a los clientes amplias posibilidades de elección de plataforma.
+
+  \chapter{Herramientas de virtualización GNU}
+
+  \noindent
+  Algunos de los sistemas de virtualización disponibles para GNU/Linux son los siguientes.
+
+  \section{BOCHS}
+
+  \noindent
+  Es un emulador de código abierto de arquitecturas basadas en x86 y AMD64 con licencia de software abierto, que funciona en múltiples plataformas capaz de emular una máquina completa incluyendo periféricos y funciona en prácticamente cualquier sistema anfitrión (se puede usar para emular una computadora en un Linux, que se ejecuta en una arquitectura PowerPC, Sparc, Mips...) y además permite simular varios sistemas operativos como Linux, Windows, DOS. \\
+
+  \noindent
+  El problema de este sistema es que es muy lento (se puede ejecutar un programa instrucción por instrucción viendo el contenido de los registros y de la memoria en todo momento, lo que constituye una valiosa información sobre el estado de la máquina para depuración.) a pesar de que las últimas versiones van mejorando la velocidad de emulación empleando técnicas de optimización.
+
+  \section{QEMU}
+
+  \noindent
+  QEMU es un emulador de software libre, similar a BOCHS que soporta dos modos de ejecución. \\
+
+  \begin{itemize}
+    \item \textbf{Emulación del sistema completo: } emula el sistema de computadora completo, incluyendo el procesador y periféricos. Este modo permite emular distintas arquitecturas (x86, x86-64, ARM, SPARC, PowerPC y MIPS) utilizando traducción dinámica de instrucciones. Se puede emular Windows o Linux en Linux, Solaris o FreeBSD.
+
+    \item \textbf{Emulación del modo usuario: } Puede ejecutar programas completos para un tipo de CPU en otro CPU. Este modo permite que un programa compilado para MIPS pueda ser ejecutado en GNU/Linux x86. Este modo sólo funciona en entornos GNU/Linux.
+  \end{itemize}
+
+  \noindent
+  Para arquitecturas x86 QEMU soporta el uso de un módulo de aceleración para sistemas anfitriones Linux y Windows que permite que parte del código que se ejecuta en sistemas invitados sea ejecutado directamente por la CPU real haciendo que QEMU funcione como sistema de virtualización nativa en lugar de cómo un emulador.
+
+  \section{KVM (Kernel Virtual Machine)}
+
+  \noindent
+  Es una solución de virtualización completa en la que se utiliza el núcleo de Linux como hypervisor, de manera que tanto el control de los dispositivos reales como la planificación de tareas y la gestión de memoria del sistema anfitrión los hace el núcleo de Linux. La instalación es muy sencilla y tiene un muy bien rendimiento en operaciones de CPU. \\
+
+  \noindent
+  En este modelo las máquinas virtuales son procesos normales del sistema por eso la gestión y la planificación de procesos son los estándar de Linux (usuario y núcleo). \\
+
+  \noindent
+  KVM tiene tres modos de ejecución:
+  \begin{itemize}
+    \item \textbf{Modo invitado: } Será el modo de ejecución normal para el código del sistema invitado siempre que no tenga operaciones de entrada-salida.
+    \item \textbf{Modo usuario: } Se usa para ejecutar operaciones de entrada-salida del sistema invitado, gestiona dispositivos virtuales a nivel de usuario.
+    \item \textbf{Modo núcleo: } Se usa para trabajar en modo invitado y para gestionar las salidas desde modo usuario causadas por operaciones especiales de entrada-salida.
+  \end{itemize}
+
+  \section{XEN}
+
+  \noindent
+  Xen es un paravirtualizador de código abierto desarrollado por la Universidad de Cambridge que permite ejecutar instancias de sistemas operativos con todas sus características, proporcionando aislamiento seguro, control de recursos, garatías de calidad de servicio y migración de máquinas virtuales en vivo.\\
+
+  \noindent
+  El hypervisor se ejecuta en el nivel más privilegiado de la máquina y básicamente se hace cargo de la planificación de tareas y de la gestión de memoria, delegando la gestión de entrada-salida en un invitado privilegiado (llamado domain 0 en Xen) que arranca con el hypervisor.\\
+
+  \noindent
+  En este modelo el código del hypervisor es más sencillo y ligero a pesar de que actualmente y dado la complejidad de la CPU (multithreading, multicore) y de la gestión de memoria, cada vez el tema de la simplicidad es evidente.\\
+
+  \noindent
+  Cuando XEN se emplea en un CPU que no soporta virtualización a nivel de hardware es necesario modificar el código del sistema operativo que se va a ejecutar sobre él. Si la CPU soporta virtualización el hypervisor de XEN se ejecuta en el anillo de máxima prioridad y en este caso se ejecutan sistemas operativos. \\
+
+  \noindent
+  Es importante tener en cuenta que mientras mayor sea el aislamiento entre máquinas virtuales menor será el rendimiento. XEN en un entorno paravirtualizado obtiene un perfecto equilibrio entre rendimiento y aislamiento.
+
+  \newpage
+  \section{Linux VServer}
+
+  \noindent
+  Es un sistema de virtualización a nivel de sistema operativo que se implementa como una serie de parches sobre el núcleo de Linux. \\
+
+  \noindent
+  Lo que hace este sistema es incluir el apoyo en el núcleo para crear y mantener múltiples entornos de usuario independientes VPS (Sistemas Privados Virtuales) sin que tengan ninguna interferencia entre ellos. \\
+
+  \noindent
+  Para independizar los espacios de usuario se define el concepto de contexto, que no es más que un contenedor de procesos relacionados con un único VPS. Cuando el sistema arranca, define un contexto por defecto que es el que emplean todos los procesos que pertenecen al sistema anfitrión. A parte de los contextos también emplea una llamada a chroot para redefinir el directorio raíz de los procesos que se ejecutan dentro de un contexto determinado y evita que puedan acceder a los directorios que hay por debajo de la raíz. \\
+
+  \noindent
+  El sistema está disponible para multiples familias de microprocesadores (x86, x86-64, PowerPC, ARM). \\
+
+  \noindent
+  El problema de este sistema es que no gestiona adecuadamente la utilización compartida de recursos virtuales como los dispositivos virtuales de red (tarjetas de red virtuales) puesto que lo que hace es usar los recursos del anfitrión sin aislarlos de los que usa la máquina virtual. Si se lanza una operación bind() contra un puerto dentro de una máquina virtual y el puerto está ocupado por un proceso que se ejecuta en el anfitrión y que no especificó una direccion IP el bind() falla, cosa que no pasaría si el aislamiento entre dispositivos virtuales de red fuera total.
+
+  \section{OpenVZ}
+
+  \noindent
+  Es un sistema similar al LinuxVServer que incluye capacidades y herramientas de administración más adelantadas que este último ya que OpenVZ añade virtualización (múltiples entornos virtuales aislados dentro del mismo núcleo), gestión de recursos (proporciona mecanismos para limitar y en ocasiones garantizar disponibilidad de recursos como la CPU, la memoria o el espacio de disco para cada entorno virtual) y capacidad de checkpointing (posibilidad de congelar un entorno virtual, almacenar su estado completo en un fichero que se usará en caso de descongelar el entorno virtual, en la misma máquina o en otra real, dejándolo en el mismo estado que tenía antes de la congelación). \\
+
+  \noindent
+  OpenVZ funciona en múltiples plataformas como x86, x86-64 o PowerPC.
+
+
+\chapter{Referencias}
+
+  \begin{itemize}
+    \item \htmladdnormallink{Virtualización - Wikipedia}{https://es.wikipedia.org/wiki/Virtualización}
+
+    \item \htmladdnormallink{Virtualización - Microsoft}{https://www.microsoft.com/en-us/cloud-platform/virtualization}
+
+
+    \item \htmladdnormallink{Máquinas Virtuales - Wikipedia}{https://es.wikipedia.org/wiki/Máquina_virtual}
+
+    \item \htmladdnormallink{Ventajas de la virtualización de Servidores}{http://www.integracanarias.com/blog/38-virtualizacion-servidores-caracteristicas-beneficios}
+
+    \item \htmladdnormallink{Herramientas de Virtualización GNU/Linux}{http://www.uv.es/sto/charlas/2010_CIM/hvl-cim-2010-slides.pdf}
+
+    \item \htmladdnormallink{BOCHS}{http://bochs.sourceforge.net/}
+
+    \item \htmladdnormallink{QEMU}{http://wiki.qemu.org/Main_Page}
+
+    \item \htmladdnormallink{KVM}{http://www.linux-kvm.org/page/Main_Page}
+
+    \item \htmladdnormallink{XEN}{https://www.xenproject.org/}
+
+    \item \htmladdnormallink{Linux VServer}{http://www.linux-vserver.org/Welcome_to_Linux-VServer.org}
+
+    \item \htmladdnormallink{OpenVZ}{https://openvz.org/Main_Page}
+  \end{itemize}
+
+\end{document}
